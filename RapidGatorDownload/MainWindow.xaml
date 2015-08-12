@@ -1,0 +1,25 @@
+﻿<Window x:Class="RapidGatorDownload.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RapidGatorDownload"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <TextBox Name="input" Grid.Row="0" KeyDown="Input_KeyDown"></TextBox>
+        <Button Name="SendButton" Click="SendButton_Click" Grid.Row="1">Send</Button>
+        <Button Name="CancelButton" Click="CancelButton_Click" Grid.Row="2">Cancel</Button>
+        <TextBox Name="output" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Grid.Row="3"></TextBox>
+        <Label Name="feedbackLabel" Grid.Row="4"></Label>
+        <ProgressBar Name="progress" Grid.Row="5" Minimum="0" Maximum="100"></ProgressBar>
+    </Grid>
+</Window>
