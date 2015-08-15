@@ -106,7 +106,7 @@ namespace RapidGatorDownload
                 //Forward slash in path
                 if (!File.Exists("I:/" + info.FileName))
                 {
-                    client.DownloadDataCompleted += Client_DownloadDataCompleted;
+                    client.DownloadFileCompleted += Client_DownloadFileCompleted;
                     client.DownloadProgressChanged += Client_DownloadProgressChanged;
                     client.DownloadFileAsync(new Uri(info.Link), "I:/" + info.FileName);
                     Console.WriteLine("File downloaded");
@@ -122,9 +122,8 @@ namespace RapidGatorDownload
             }
         }
 
-        private void Client_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e)
+        private void Client_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
-            //This event doesn't fire when the download async is cancelled for some reason
             if (e.Cancelled)
             {
                 MessageBox.Show("Download cancelled");

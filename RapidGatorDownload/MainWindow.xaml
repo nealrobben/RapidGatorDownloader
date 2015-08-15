@@ -18,14 +18,18 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
             <RowDefinition Height="*" />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
-        <TextBox Name="input" Grid.Row="0" KeyDown="Input_KeyDown"></TextBox>
-        <Button Name="SendButton" Click="SendButton_Click" Grid.Row="1">Send</Button>
-        <Button Name="CancelButton" Click="CancelButton_Click" Grid.Row="2">Cancel</Button>
-        <TextBox Name="output" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Grid.Row="3"></TextBox>
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <TextBlock Margin="5">Download URL:</TextBlock>
+                <TextBox Name="input" KeyDown="Input_KeyDown" Width="680" Margin="5"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                <Button Name="SendButton" Click="SendButton_Click" Width="100" Margin="5">Send</Button>
+                <Button Name="CancelButton" Click="CancelButton_Click" Width="100" Margin="5">Cancel</Button>
+            </StackPanel>
+            <TextBox Name="output" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Grid.Row="3"></TextBox>
         <ProgressBar Name="progress" Grid.Row="4" Minimum="0" Maximum="100"></ProgressBar>
         </Grid>  
     </DockPanel>
