@@ -6,20 +6,28 @@
         xmlns:local="clr-namespace:RapidGatorDownload"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="800" WindowStartupLocation="CenterScreen">
-    <Grid>
+    <DockPanel>
+        <Menu x:Name="mnuSettings" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="30" DockPanel.Dock="Top">
+            <MenuItem Header="Settings" Click="mnuSettings_Click" />
+            <MenuItem Header="Exit" />
+        </Menu>
+        <StatusBar HorizontalAlignment="Stretch" VerticalAlignment="Stretch" DockPanel.Dock="Bottom">
+            <Label Name="feedbackLabel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Label>
+        </StatusBar>
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
             <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <TextBox Name="input" Grid.Row="0" KeyDown="Input_KeyDown"></TextBox>
         <Button Name="SendButton" Click="SendButton_Click" Grid.Row="1">Send</Button>
         <Button Name="CancelButton" Click="CancelButton_Click" Grid.Row="2">Cancel</Button>
         <TextBox Name="output" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Grid.Row="3"></TextBox>
-        <Label Name="feedbackLabel" Grid.Row="4"></Label>
-        <ProgressBar Name="progress" Grid.Row="5" Minimum="0" Maximum="100"></ProgressBar>
-    </Grid>
+        <ProgressBar Name="progress" Grid.Row="4" Minimum="0" Maximum="100"></ProgressBar>
+        </Grid>  
+    </DockPanel>
+
 </Window>

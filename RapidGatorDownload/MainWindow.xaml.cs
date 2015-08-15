@@ -14,25 +14,28 @@ namespace RapidGatorDownload
     public partial class MainWindow : Window
     {
         private WebClient client;
+        private UserInfo userInfo;
+
+        private string userName = string.Empty;
+        private string password = string.Empty;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            userName = new SecureString().Unprotect(ReadSetting("UserName"));
+            password = new SecureString().Unprotect(ReadSetting("Password"));
         }
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
-            ReadSetting("UserName");
-            SaveSetting("UserName", "Neal");
-
-            //DownloadWithHttpRequest();
+            DownloadWithHttpRequest();
         }
 
-        private void ReadSetting(string key)
+        private string ReadSetting(string key)
         {
             var appSettings = ConfigurationManager.AppSettings;
-            string result = appSettings[key] ?? "Not Found";
-            Console.WriteLine(result);
+            return appSettings[key] ?? "Not Found";
         }
 
         private void SaveSetting(string key, string value)
@@ -60,7 +63,7 @@ namespace RapidGatorDownload
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            if(client != null && client.IsBusy)
+            if (client != null && client.IsBusy)
             {
                 client.CancelAsync();
             }
@@ -80,9 +83,19 @@ namespace RapidGatorDownload
         /// </summary>
         private void DownloadWithHttpRequest()
         {
+            // http://rapidgator.net/file/831b3e77beb3071abe71c9d50225cc6d/The_Flash_Annual_01_(1959).cbr.html
             string fileUrl = @"http://rapidgator.net/file/2167549b9f220c67307580f9acfc44d5/18630NN.rar.html";
 
-            UserInfo userInfo = GetUserInfo();
+            if (!string.IsNullOrWhiteSpace(input.Text))
+            {
+                fileUrl = input.Text;
+            }
+
+            if (userInfo == null)
+            {
+                userInfo = GetUserInfo();
+            }
+
             DownloadInfo info = GetDownloadInfoFromURL(fileUrl, userInfo);
 
             client = new WebClient();
@@ -102,19 +115,17 @@ namespace RapidGatorDownload
                 {
                     Console.WriteLine("File already exists");
                 }
-
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-            }            
-
+            }
         }
 
         private void Client_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e)
         {
             //This event doesn't fire when the download async is cancelled for some reason
-            if(e.Cancelled)
+            if (e.Cancelled)
             {
                 MessageBox.Show("Download cancelled");
             }
@@ -138,7 +149,7 @@ namespace RapidGatorDownload
 
             //Write Post-info to body of request
             StreamWriter requestWriter = new StreamWriter(loginRequest.GetRequestStream());
-            
+            requestWriter.Write($"LoginForm%5Bemail%5D={userName}&LoginForm%5Bpassword%5D={password}&LoginForm%5BrememberMe%5D=0&LoginForm%5BverifyCode%5D=");
             requestWriter.Close();
 
             var loginResponse = (HttpWebResponse)loginRequest.GetResponse();
@@ -156,11 +167,14 @@ namespace RapidGatorDownload
             return new UserInfo() { PHPSESSIONID = phpSessionIDValue, User = userIDValue };
         }
 
+        /// <summary>
+        /// Perform a request to get the download page for a certain url and then extract the exact downloadlink from the HTML
+        /// </summary>
         private DownloadInfo GetDownloadInfoFromURL(string url, UserInfo userInfo)
         {
             //http://rapidgator.net/file/2167549b9f220c67307580f9acfc44d5/18630NN.rar.html
 
-            HttpWebRequest normalRequest = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebRequest normalRequest = (HttpWebRequest)WebRequest.Create(url.Trim());
             normalRequest.UserAgent = @"Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko";
             normalRequest.Method = "Get";
             normalRequest.Accept = @"text/html, application/xhtml+xml, */*";
@@ -179,6 +193,11 @@ namespace RapidGatorDownload
             return ExtractDownloadInfoFromHTML(responseContent);
         }
 
+        /// <summary>
+        /// Extract the exact downloadlink from the HTML code
+        /// </summary>
+        /// <param name="htmlPage"></param>
+        /// <returns></returns>
         private DownloadInfo ExtractDownloadInfoFromHTML(string htmlPage)
         {
             string fileUrlRegEx = string.Empty;
@@ -215,6 +234,26 @@ namespace RapidGatorDownload
         {
             public string PHPSESSIONID { get; set; }
             public string User { get; set; }
+        }
+
+        private void mnuSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var settingsWindow = new Settings();
+            settingsWindow.Owner = this;
+
+            settingsWindow.UserName = userName;
+            settingsWindow.Password = password;
+
+            settingsWindow.ShowDialog();
+
+            userName = settingsWindow.UserName;
+            password = settingsWindow.Password;
+
+            string secureUserName = new SecureString().Protect(userName);
+            string securePassword = new SecureString().Protect(password);
+
+            SaveSetting("UserName", secureUserName);
+            SaveSetting("Password", securePassword);
         }
     }
 }
