@@ -35,7 +35,7 @@
             <DataGrid Name="DownloadsGrid" Grid.Row="2" ItemsSource="{Binding Path=downloadsList}" HorizontalAlignment="Stretch" 
                       VerticalAlignment="Stretch" HeadersVisibility="All" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="DownloadName" ClipboardContentBinding="{x:Null}" Width="250"/>
+                    <DataGridTextColumn Header="DownloadName" ClipboardContentBinding="{x:Null}" Width="250" Binding="{Binding DownloadName}" />
                     <DataGridTemplateColumn Header="Progress" Width="400">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
