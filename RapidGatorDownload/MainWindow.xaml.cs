@@ -250,14 +250,14 @@ namespace RapidGatorDownload
             public string User { get; set; }
         }
 
-        public class DownloadItem
+        public class DownloadItem : DependencyObject
         {
             private UserInfo usrInfo;
             private DownloadInfo dlInfo;
             private WebClient client;
 
             public string DownloadName { get; set; }
-            public int Progress { get; set; }
+            //public int Progress { get; set; }
 
             public DownloadItem(UserInfo usrInfo, DownloadInfo dlInfo)
             {
@@ -296,6 +296,17 @@ namespace RapidGatorDownload
                 Progress = e.ProgressPercentage;
                 //feedbackLabel.Content = $"{e.ProgressPercentage}% ({e.BytesReceived / 1000000}MB/{e.TotalBytesToReceive / 1000000}MB) ";
             }
+
+            public int Progress
+            {
+                get { return (int)GetValue(ProgressProperty); }
+                set { SetValue(ProgressProperty, value); }
+            }
+
+            // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
+            public static readonly DependencyProperty ProgressProperty =
+                DependencyProperty.Register("Progress", typeof(int), typeof(DownloadItem), new PropertyMetadata(0));
+
         }
 
         private void mnuSettings_Click(object sender, RoutedEventArgs e)
