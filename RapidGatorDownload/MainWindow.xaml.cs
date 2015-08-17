@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using System.Configuration;
+using System.Collections.ObjectModel;
 
 namespace RapidGatorDownload
 {
@@ -19,12 +20,25 @@ namespace RapidGatorDownload
         private string userName = string.Empty;
         private string password = string.Empty;
 
+        public ObservableCollection<DownloadItem> downloadsList = new ObservableCollection<DownloadItem>();
+
         public MainWindow()
         {
             InitializeComponent();
 
             userName = new SecureString().Unprotect(ReadSetting("UserName"));
             password = new SecureString().Unprotect(ReadSetting("Password"));
+
+            var test = new DownloadItem() { DownloadName = "Test", Progress = 20 };
+            var test2 = new DownloadItem() { DownloadName = "Test2", Progress = 30 };
+            var test3 = new DownloadItem() { DownloadName = "Test3", Progress = 35 };
+
+            DownloadsGrid.ItemsSource = downloadsList;
+
+            downloadsList.Add(test);
+            downloadsList.Add(test2);
+            downloadsList.Add(test3);
+            
         }
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
@@ -238,6 +252,12 @@ namespace RapidGatorDownload
         {
             public string PHPSESSIONID { get; set; }
             public string User { get; set; }
+        }
+
+        public class DownloadItem
+        {
+            public string DownloadName { get; set; }
+            public int Progress { get; set; }
         }
 
         private void mnuSettings_Click(object sender, RoutedEventArgs e)

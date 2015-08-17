@@ -15,12 +15,12 @@
             <Label Name="feedbackLabel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Label>
         </StatusBar>
         <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="30" />
-        </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0">
                 <TextBlock Margin="5">Download URL:</TextBlock>
                 <TextBox Name="input" KeyDown="Input_KeyDown" Width="680" Margin="5"></TextBox>
@@ -29,9 +29,23 @@
                 <Button Name="SendButton" Click="SendButton_Click" Width="100" Margin="5">Send</Button>
                 <Button Name="CancelButton" Click="CancelButton_Click" Width="100" Margin="5">Cancel</Button>
             </StackPanel>
-            <TextBox Name="output" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Grid.Row="3"></TextBox>
-        <ProgressBar Name="progress" Grid.Row="4" Minimum="0" Maximum="100"></ProgressBar>
-        </Grid>  
+            <DataGrid Name="DownloadsGrid" Grid.Row="2" ItemsSource="{Binding Path=downloadsList}" HorizontalAlignment="Stretch" 
+                      VerticalAlignment="Stretch" HeadersVisibility="All" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="DownloadName" ClipboardContentBinding="{x:Null}"/>
+                    <DataGridTemplateColumn Header="Progress">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <ProgressBar Value="{Binding Path=Progress}" HorizontalAlignment="Stretch"></ProgressBar>
+                                    <Label HorizontalAlignment="Center" Content="{Binding Path=Progress}"></Label>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <ProgressBar Name="progress" Grid.Row="3" Minimum="0" Maximum="100"></ProgressBar>
+        </Grid>
     </DockPanel>
-
 </Window>
