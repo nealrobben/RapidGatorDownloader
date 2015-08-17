@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RapidGatorDownload"
         mc:Ignorable="d"
-        Title="Settings" Height="100" Width="300" WindowStartupLocation="CenterOwner">
+        Title="Settings" Height="130" Width="300" WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
@@ -19,5 +20,9 @@
         <Label x:Name="lblPassword" Content="Password" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top"/>
         <PasswordBox x:Name="txtPassword" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" />
         <TextBox x:Name="txtUserName" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="" VerticalAlignment="Stretch"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2">
+            <Button Name="OkButton" Content="OK" Width="80" Margin="5,5,5,0" Height="20" VerticalAlignment="Top" Click="OkButton_Click"></Button>
+            <Button Name="CancelButton" Content="Cancel" Width="80" Margin="5" Click="CancelButton_Click"></Button>
+        </StackPanel>
     </Grid>
 </Window>

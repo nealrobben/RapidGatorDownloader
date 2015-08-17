@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RapidGatorDownload"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+        Title="RapidgatorDownload" Height="600" Width="800" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     <DockPanel>
         <Menu x:Name="mnuSettings" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="30" DockPanel.Dock="Top">
             <MenuItem Header="Settings" Click="mnuSettings_Click" />

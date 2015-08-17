@@ -29,7 +29,7 @@ namespace RapidGatorDownload
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
-            DownloadWithHttpRequest();
+            DownloadFile();
         }
 
         private string ReadSetting(string key)
@@ -81,7 +81,7 @@ namespace RapidGatorDownload
         /// Log into rapidgator. Send an HTTPS Post request with the login information. Use the userid (and sessionID?) returned to make
         /// a normal HTTP Get request to verify that you are logged in.
         /// </summary>
-        private void DownloadWithHttpRequest()
+        private void DownloadFile()
         {
             // http://rapidgator.net/file/831b3e77beb3071abe71c9d50225cc6d/The_Flash_Annual_01_(1959).cbr.html
             string fileUrl = @"http://rapidgator.net/file/2167549b9f220c67307580f9acfc44d5/18630NN.rar.html";
@@ -127,6 +127,11 @@ namespace RapidGatorDownload
             if (e.Cancelled)
             {
                 MessageBox.Show("Download cancelled");
+                feedbackLabel.Content = "Download canceled";
+            }
+            else
+            {
+                feedbackLabel.Content = $"Download completed";
             }
         }
 
@@ -243,8 +248,10 @@ namespace RapidGatorDownload
             settingsWindow.UserName = userName;
             settingsWindow.Password = password;
 
-            settingsWindow.ShowDialog();
+            var result = settingsWindow.ShowDialog();
 
+            if(result == true)
+            {
             userName = settingsWindow.UserName;
             password = settingsWindow.Password;
 
@@ -253,6 +260,15 @@ namespace RapidGatorDownload
 
             SaveSetting("UserName", secureUserName);
             SaveSetting("Password", securePassword);
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if(client != null)
+            {
+                client.Dispose();
+            }
         }
     }
 }
