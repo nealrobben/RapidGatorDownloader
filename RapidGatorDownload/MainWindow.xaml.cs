@@ -290,5 +290,10 @@ namespace RapidGatorDownload
                 client.Dispose();
             }
         }
+
+        private void mnuExit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

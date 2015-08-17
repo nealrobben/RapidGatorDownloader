@@ -8,8 +8,11 @@
         Title="RapidgatorDownload" Height="600" Width="800" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     <DockPanel>
         <Menu x:Name="mnuSettings" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="30" DockPanel.Dock="Top">
-            <MenuItem Header="Settings" Click="mnuSettings_Click" />
-            <MenuItem Header="Exit" />
+            <MenuItem Header="File">
+                <MenuItem Header="Settings" Name="settingsMenu" Click="mnuSettings_Click">
+                </MenuItem>
+                <MenuItem Header="Exit" Name="exitMenu" Click="mnuExit_Click" />
+            </MenuItem>
         </Menu>
         <StatusBar HorizontalAlignment="Stretch" VerticalAlignment="Stretch" DockPanel.Dock="Bottom">
             <Label Name="feedbackLabel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Label>
@@ -32,8 +35,8 @@
             <DataGrid Name="DownloadsGrid" Grid.Row="2" ItemsSource="{Binding Path=downloadsList}" HorizontalAlignment="Stretch" 
                       VerticalAlignment="Stretch" HeadersVisibility="All" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="DownloadName" ClipboardContentBinding="{x:Null}"/>
-                    <DataGridTemplateColumn Header="Progress">
+                    <DataGridTextColumn Header="DownloadName" ClipboardContentBinding="{x:Null}" Width="250"/>
+                    <DataGridTemplateColumn Header="Progress" Width="400">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
