@@ -29,16 +29,7 @@ namespace RapidGatorDownload
             userName = new SecureString().Unprotect(ReadSetting("UserName"));
             password = new SecureString().Unprotect(ReadSetting("Password"));
 
-            var test = new DownloadItem() { DownloadName = "Test", Progress = 20 };
-            var test2 = new DownloadItem() { DownloadName = "Test2", Progress = 30 };
-            var test3 = new DownloadItem() { DownloadName = "Test3", Progress = 35 };
-
             DownloadsGrid.ItemsSource = downloadsList;
-
-            downloadsList.Add(test);
-            downloadsList.Add(test2);
-            downloadsList.Add(test3);
-            
         }
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
@@ -112,28 +103,33 @@ namespace RapidGatorDownload
 
             DownloadInfo info = GetDownloadInfoFromURL(fileUrl, userInfo);
 
-            client = new WebClient();
-            client.Headers.Add(HttpRequestHeader.Cookie, "user__=" + userInfo.User + ";" + "PHPSESSID=" + userInfo.PHPSESSIONID);
+            var downloadItem = new DownloadItem(userInfo,info);
+            downloadsList.Add(downloadItem);
 
-            try
-            {
-                //Forward slash in path
-                if (!File.Exists("I:/" + info.FileName))
-                {
-                    client.DownloadFileCompleted += Client_DownloadFileCompleted;
-                    client.DownloadProgressChanged += Client_DownloadProgressChanged;
-                    client.DownloadFileAsync(new Uri(info.Link), "I:/" + info.FileName);
-                    Console.WriteLine("File downloaded");
-                }
-                else
-                {
-                    Console.WriteLine("File already exists");
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            downloadItem.DownLoad();
+
+            //client = new WebClient();
+            //client.Headers.Add(HttpRequestHeader.Cookie, "user__=" + userInfo.User + ";" + "PHPSESSID=" + userInfo.PHPSESSIONID);
+
+            //try
+            //{
+            //    //Forward slash in path
+            //    if (!File.Exists("I:/" + info.FileName))
+            //    {
+            //        client.DownloadFileCompleted += Client_DownloadFileCompleted;
+            //        client.DownloadProgressChanged += Client_DownloadProgressChanged;
+            //        client.DownloadFileAsync(new Uri(info.Link), "I:/" + info.FileName);
+            //        Console.WriteLine("File downloaded");
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("File already exists");
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //}
         }
 
         private void Client_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
@@ -242,13 +238,13 @@ namespace RapidGatorDownload
             return new DownloadInfo() { Link = fileUrlRegEx, FileName = fileNameRegEx };
         }
 
-        private class DownloadInfo
+        public class DownloadInfo
         {
             public string Link { get; set; }
             public string FileName { get; set; }
         }
 
-        private class UserInfo
+        public class UserInfo
         {
             public string PHPSESSIONID { get; set; }
             public string User { get; set; }
@@ -256,8 +252,50 @@ namespace RapidGatorDownload
 
         public class DownloadItem
         {
+            private UserInfo usrInfo;
+            private DownloadInfo dlInfo;
+            private WebClient client;
+
             public string DownloadName { get; set; }
             public int Progress { get; set; }
+
+            public DownloadItem(UserInfo usrInfo, DownloadInfo dlInfo)
+            {
+                this.usrInfo = usrInfo;
+                this.dlInfo = dlInfo;
+
+                DownloadName = dlInfo.FileName;
+                Progress = 0;
+            }
+
+            public void DownLoad()
+            {
+                client = new WebClient();
+                client.Headers.Add(HttpRequestHeader.Cookie, "user__=" + usrInfo.User + ";" + "PHPSESSID=" + usrInfo.PHPSESSIONID);
+
+                if (!File.Exists("I:/" + dlInfo.FileName))
+                {
+                    client.DownloadFileCompleted += Client_DownloadFileCompleted;
+                    client.DownloadProgressChanged += Client_DownloadProgressChanged;
+                    client.DownloadFileAsync(new Uri(dlInfo.Link), "I:/" + dlInfo.FileName);
+                    Console.WriteLine("File downloaded");
+                }
+                else
+                {
+                    Console.WriteLine("File already exists");
+                }
+            }
+
+            private void Client_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+            {
+
+            }
+
+            private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+            {
+                Progress = e.ProgressPercentage;
+                //feedbackLabel.Content = $"{e.ProgressPercentage}% ({e.BytesReceived / 1000000}MB/{e.TotalBytesToReceive / 1000000}MB) ";
+            }
         }
 
         private void mnuSettings_Click(object sender, RoutedEventArgs e)
