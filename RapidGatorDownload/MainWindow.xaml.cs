@@ -255,7 +255,7 @@ namespace RapidGatorDownload
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
+            e.Cancel = (MessageBox.Show("Are you sure you want to exit?", "Exit", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel);
         }
 
         private void mnuExit_Click(object sender, RoutedEventArgs e)
@@ -269,7 +269,7 @@ namespace RapidGatorDownload
 
             if(itm != null)
             {
-
+                itm.CancelDownload();
             }
         }
     }
