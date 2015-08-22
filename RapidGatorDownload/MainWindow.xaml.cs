@@ -14,7 +14,6 @@ namespace RapidGatorDownload
     /// </summary>
     public partial class MainWindow : Window
     {
-        private WebClient client;
         private UserInfo userInfo;
 
         private string userName = string.Empty;
@@ -66,14 +65,6 @@ namespace RapidGatorDownload
             }
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (client != null && client.IsBusy)
-            {
-                client.CancelAsync();
-            }
-        }
-
         private void Input_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
@@ -94,6 +85,7 @@ namespace RapidGatorDownload
             if (!string.IsNullOrWhiteSpace(input.Text))
             {
                 fileUrl = input.Text;
+                input.Text = string.Empty;
             }
 
             if (userInfo == null)
@@ -147,8 +139,8 @@ namespace RapidGatorDownload
 
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            progress.Value = e.ProgressPercentage;
-            feedbackLabel.Content = $"{e.ProgressPercentage}% ({e.BytesReceived / 1000000}MB/{e.TotalBytesToReceive / 1000000}MB) ";
+            //progress.Value = e.ProgressPercentage;
+            //feedbackLabel.Content = $"{e.ProgressPercentage}% ({e.BytesReceived / 1000000}MB/{e.TotalBytesToReceive / 1000000}MB) ";
         }
 
         private UserInfo GetUserInfo()
@@ -238,77 +230,6 @@ namespace RapidGatorDownload
             return new DownloadInfo() { Link = fileUrlRegEx, FileName = fileNameRegEx };
         }
 
-        public class DownloadInfo
-        {
-            public string Link { get; set; }
-            public string FileName { get; set; }
-        }
-
-        public class UserInfo
-        {
-            public string PHPSESSIONID { get; set; }
-            public string User { get; set; }
-        }
-
-        public class DownloadItem : DependencyObject
-        {
-            private UserInfo usrInfo;
-            private DownloadInfo dlInfo;
-            private WebClient client;
-
-            public string DownloadName { get; set; }
-            //public int Progress { get; set; }
-
-            public DownloadItem(UserInfo usrInfo, DownloadInfo dlInfo)
-            {
-                this.usrInfo = usrInfo;
-                this.dlInfo = dlInfo;
-
-                DownloadName = dlInfo.FileName;
-                Progress = 0;
-            }
-
-            public void DownLoad()
-            {
-                client = new WebClient();
-                client.Headers.Add(HttpRequestHeader.Cookie, "user__=" + usrInfo.User + ";" + "PHPSESSID=" + usrInfo.PHPSESSIONID);
-
-                if (!File.Exists("I:/" + dlInfo.FileName))
-                {
-                    client.DownloadFileCompleted += Client_DownloadFileCompleted;
-                    client.DownloadProgressChanged += Client_DownloadProgressChanged;
-                    client.DownloadFileAsync(new Uri(dlInfo.Link), "I:/" + dlInfo.FileName);
-                    Console.WriteLine("File downloaded");
-                }
-                else
-                {
-                    Console.WriteLine("File already exists");
-                }
-            }
-
-            private void Client_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
-            {
-
-            }
-
-            private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-            {
-                Progress = e.ProgressPercentage;
-                //feedbackLabel.Content = $"{e.ProgressPercentage}% ({e.BytesReceived / 1000000}MB/{e.TotalBytesToReceive / 1000000}MB) ";
-            }
-
-            public int Progress
-            {
-                get { return (int)GetValue(ProgressProperty); }
-                set { SetValue(ProgressProperty, value); }
-            }
-
-            // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
-            public static readonly DependencyProperty ProgressProperty =
-                DependencyProperty.Register("Progress", typeof(int), typeof(DownloadItem), new PropertyMetadata(0));
-
-        }
-
         private void mnuSettings_Click(object sender, RoutedEventArgs e)
         {
             var settingsWindow = new Settings();
@@ -334,15 +255,22 @@ namespace RapidGatorDownload
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if(client != null)
-            {
-                client.Dispose();
-            }
+
         }
 
         private void mnuExit_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void CancelMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            DownloadItem itm = (DownloadItem)DownloadsGrid.SelectedItem;
+
+            if(itm != null)
+            {
+
+            }
         }
     }
 }

@@ -22,18 +22,21 @@
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="30" />
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0">
                 <TextBlock Margin="5">Download URL:</TextBlock>
                 <TextBox Name="input" KeyDown="Input_KeyDown" Width="680" Margin="5"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1">
-                <Button Name="SendButton" Click="SendButton_Click" Width="100" Margin="5">Send</Button>
-                <Button Name="CancelButton" Click="CancelButton_Click" Width="100" Margin="5">Cancel</Button>
+                <Button Name="SendButton" Click="SendButton_Click" Width="100" Margin="5">Add</Button>
             </StackPanel>
             <DataGrid Name="DownloadsGrid" Grid.Row="2" ItemsSource="{Binding Path=downloadsList}" HorizontalAlignment="Stretch" 
                       VerticalAlignment="Stretch" HeadersVisibility="All" AutoGenerateColumns="False">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Name="CancelMenuItem" Header="Cancel" Click="CancelMenuItem_Click" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="DownloadName" ClipboardContentBinding="{x:Null}" Width="250" Binding="{Binding DownloadName}" />
                     <DataGridTemplateColumn Header="Progress" Width="400">
@@ -48,7 +51,6 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <ProgressBar Name="progress" Grid.Row="3" Minimum="0" Maximum="100"></ProgressBar>
         </Grid>
     </DockPanel>
 </Window>
