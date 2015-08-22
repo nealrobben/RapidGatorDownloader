@@ -99,29 +99,6 @@ namespace RapidGatorDownload
             downloadsList.Add(downloadItem);
 
             downloadItem.DownLoad();
-
-            //client = new WebClient();
-            //client.Headers.Add(HttpRequestHeader.Cookie, "user__=" + userInfo.User + ";" + "PHPSESSID=" + userInfo.PHPSESSIONID);
-
-            //try
-            //{
-            //    //Forward slash in path
-            //    if (!File.Exists("I:/" + info.FileName))
-            //    {
-            //        client.DownloadFileCompleted += Client_DownloadFileCompleted;
-            //        client.DownloadProgressChanged += Client_DownloadProgressChanged;
-            //        client.DownloadFileAsync(new Uri(info.Link), "I:/" + info.FileName);
-            //        Console.WriteLine("File downloaded");
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("File already exists");
-            //    }
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e.Message);
-            //}
         }
 
         private void Client_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
@@ -135,12 +112,6 @@ namespace RapidGatorDownload
             {
                 feedbackLabel.Content = $"Download completed";
             }
-        }
-
-        private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            //progress.Value = e.ProgressPercentage;
-            //feedbackLabel.Content = $"{e.ProgressPercentage}% ({e.BytesReceived / 1000000}MB/{e.TotalBytesToReceive / 1000000}MB) ";
         }
 
         private UserInfo GetUserInfo()
