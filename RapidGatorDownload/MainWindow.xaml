@@ -44,7 +44,7 @@
                             <DataTemplate>
                                 <Grid>
                                     <ProgressBar Value="{Binding Path=Progress}" HorizontalAlignment="Stretch"></ProgressBar>
-                                    <Label HorizontalAlignment="Center" Content="{Binding Path=Progress}"></Label>
+                                    <Label HorizontalAlignment="Center" Content="{Binding Path=ProgressFeedback}"></Label>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
